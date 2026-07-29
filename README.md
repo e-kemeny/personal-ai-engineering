@@ -1,4 +1,3 @@
-# personal-ai-engineering
 # AI Engineering Roadmap
 
 A project-based portfolio documenting my journey into AI engineering through first-principles implementations, modern deep learning, and GPU programming.
