@@ -43,8 +43,9 @@ class Vocab:
         return results_list
 
 ## Test Section ##
-tokens = tokenizer("The cat sat, on the mat! The cat ran.")
-v = Vocab(tokens, min_counts=2)
-print(v.word2idx)
-encoded = v.encode(["the", "cat", "sat", "dog"])
-print(encoded)
+        
+# tokens = tokenizer("The cat sat, on the mat! The cat ran.")
+# v = Vocab(tokens, min_counts=2)
+# print(v.word2idx)
+# encoded = v.encode(["the", "cat", "sat", "dog"])
+# print(encoded)
