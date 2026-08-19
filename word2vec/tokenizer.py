@@ -8,7 +8,8 @@ def tokenizer(text):
         for char in word:
             if char.isalpha() or char == "'":
                 clean_word = clean_word + char
-        clean_list.append(clean_word)
+        if clean_word:
+            clean_list.append(clean_word)
     return clean_list
 
 result = tokenizer("The cat sat, on the mat!")
@@ -43,7 +44,10 @@ class Vocab:
         return results_list
 
 ## Test Section ##
-        
+
+# result = tokenizer("wait - really?")
+# print(result)
+
 # tokens = tokenizer("The cat sat, on the mat! The cat ran.")
 # v = Vocab(tokens, min_counts=2)
 # print(v.word2idx)
