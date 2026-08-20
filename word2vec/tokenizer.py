@@ -16,7 +16,7 @@ result = tokenizer("The cat sat, on the mat!")
 print(result)
 
 class Vocab:
-    def __init__(self, tokens, min_counts = 1):
+    def __init__(self, tokens, min_count = 1):
         self.word_counts = {}
 
         for word in tokens:
@@ -28,7 +28,7 @@ class Vocab:
         self.word2idx = {}
         next_id = 0
         for word in self.word_counts:
-            if self.word_counts[word] >= min_counts:
+            if self.word_counts[word] >= min_count:
                 self.word2idx[word] = next_id
                 next_id += 1
 
