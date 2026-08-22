@@ -22,17 +22,17 @@ The implementation includes:
 
 Given a center word and a nearby context word, the model learns embeddings that assign a high probability to real center-context pairs and a low probability to randomly sampled negative pairs.
 
-For a center embedding \(v_c\) and context embedding \(v_o\), the model computes:
+For a center embedding $v_c$ and context embedding $v_o$, the model computes:
 
-\[
+$$
 P(o|c) = \sigma(v_c \cdot v_o)
-\]
+$$
 
 Negative samples are drawn from a frequency-based distribution:
 
-\[
-P(w) \propto count(w)^{0.75}
-\]
+$$
+P(w) \propto \text{count}(w)^{0.75}
+$$
 
 Rather than computing a full softmax across the vocabulary, the model learns from one positive pair and several sampled negative pairs.
 
@@ -42,11 +42,11 @@ The base SGNS implementation was extended with **L1 regularization** to investig
 
 The training objective becomes:
 
-\[
-L = L_{positive} + L_{negative} + \lambda L_1
-\]
+$$
+L = L_{\text{positive}} + L_{\text{negative}} + \lambda L_1
+$$
 
-where \(\lambda\) controls the strength of the sparsity penalty.
+where $\lambda$ controls the strength of the sparsity penalty.
 
 Sparsity is measured as the proportion of center-embedding parameters with an absolute value below `0.01`.
 
@@ -90,7 +90,7 @@ The experiment therefore demonstrates a clear **sparsity-quality tradeoff** unde
 
 ## An Interesting Result: Lower Loss ≠ Better Embeddings
 
-One particularly useful result appeared when comparing the training objective with external semantic evaluation.
+One particularly useful result appeared when comparing prediction loss with external semantic evaluation.
 
 As L1 regularization increased, prediction loss decreased:
 
@@ -110,9 +110,9 @@ But WordSim-353 correlation simultaneously decreased:
 
 This illustrates an important machine-learning principle:
 
-> Improving the optimization objective does not necessarily improve the property of the representation that actually matters.
+> Improving one optimization metric does not necessarily improve the property of the representation that actually matters.
 
-For this experiment, stronger regularization helped optimize the regularized training objective and drove parameters toward zero, but eventually destroyed semantic information captured by the embeddings.
+For this experiment, stronger regularization drove more embedding parameters toward zero while prediction loss decreased, but semantic agreement with human judgments also deteriorated.
 
 ## Semantic Evaluation
 
@@ -160,12 +160,12 @@ Training examples are processed in batches of `256` rather than performing an op
 Each batch contains:
 
 ```text
-center IDs:      [batch_size]
-context IDs:     [batch_size]
-negative IDs:    [batch_size, 3]
+center IDs:   [batch_size]
+context IDs:  [batch_size]
+negative IDs: [batch_size, 3]
 ```
 
-The model performs the embedding lookups and dot products for the entire batch using tensor operations.
+The model performs embedding lookups and dot products for the entire batch using tensor operations.
 
 A final partial batch is also processed so training pairs are not silently discarded when the number of examples is not divisible by the batch size.
 
@@ -225,13 +225,13 @@ Some of the most important lessons were:
 - How negative sampling replaces an expensive full-vocabulary objective
 - Why Word2Vec uses the unigram distribution raised to the `0.75` power
 - How tensor shapes change when moving from individual examples to batched training
-- How vectorization substantially reduces Python-level training overhead
+- How vectorization reduces Python-level training overhead
 - Why negative samples must be checked against positive contexts
 - How L1 regularization drives model parameters toward zero
 - How to quantify embedding sparsity
 - How cosine similarity can be used to inspect learned representation geometry
 - How WordSim-353 provides an external measure of semantic quality
-- Why lower training loss does not necessarily mean better learned representations
+- Why lower prediction loss does not necessarily mean better learned representations
 
 ## Tech Stack
 
@@ -255,7 +255,7 @@ Notable limitations include:
 - WordSim coverage is restricted by the learned vocabulary.
 - The implementation prioritizes transparency over maximum training throughput.
 
-These constraints make the model small enough to inspect and modify directly while still allowing meaningful experiments on the behavior of learned embeddings.
+These constraints make the model small enough to inspect and modify directly while still allowing experiments on the behavior of learned embeddings.
 
 ## Future Work
 
@@ -277,4 +277,4 @@ Potential extensions include:
 
 The goal of this project was not simply to call an existing Word2Vec implementation.
 
-It was to build the training system from its underlying components, understand how those components interact, and then use that implementation to run an original experiment on the relationship between **representation sparsity and semantic quality**.
+It was to build the training system from its underlying components, understand how those components interact, and then use that implementation to investigate the relationship between **representation sparsity and semantic quality**.
