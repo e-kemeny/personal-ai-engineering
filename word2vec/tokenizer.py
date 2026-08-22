@@ -13,7 +13,7 @@ def tokenizer(text):
     return clean_list
 
 result = tokenizer("The cat sat, on the mat!")
-print(result)
+## print(result)
 
 class Vocab:
     def __init__(self, tokens, min_count = 1):
