@@ -2,40 +2,35 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
 results = [
-    [0, 0.01065340917557478, 1.1226169821939227],
-    [0.0001, 0.01278409082442522, 1.1088346402792577],
-    [0.0005, 0.03267045319080353, 1.0706996370843564],
-    [0.001, 0.09588067978620529, 1.0559896584082362],
-    [0.002, 0.3089488744735718, 1.0985557858992754],
-    [0.003, 0.515625, 1.1869544624768456],
-    [0.005, 0.8217329382896423, 1.3384032108660402],
-    [0.01, 0.9978693127632141, 1.3863112513361306]
+    [0, 0.008616909384727478, 0.05543749465743722],
+    [20.0, 0.2543923556804657, 0.03247252293697082],
+    [50.0, 0.5737594962120056, 0.000620743845562995]
 ]
 
 l1_weights = []
 sparsities = []
-prediction_losses = []
+spearman_scores = []
 
 for result in results:
     l1_weights.append(result[0])
     sparsities.append(result[1])
-    prediction_losses.append(result[2])
+    spearman_scores.append(result[2])
 
 plt.figure(figsize=(10, 6))
 
 plt.plot(
     sparsities,
-    prediction_losses,
+    spearman_scores,
     linewidth=2,
     zorder=1
 )
 
 scatter = plt.scatter(
     sparsities,
-    prediction_losses,
+    spearman_scores,
     c=range(len(l1_weights)),
     cmap="viridis",
-    s=80,
+    s=90,
     zorder=2
 )
 
@@ -46,7 +41,7 @@ legend_labels = [f"λ = {weight}" for weight in l1_weights]
 plt.legend(
     handles,
     legend_labels,
-    title="L1 Weight (λ)",
+    title="L1 Weight",
     bbox_to_anchor=(1.02, 0.5),
     loc="center left"
 )
@@ -54,10 +49,16 @@ plt.legend(
 plt.gca().xaxis.set_major_formatter(PercentFormatter(1.0))
 
 plt.xlabel("Embedding Sparsity")
-plt.ylabel("Prediction Loss")
-plt.title("Word2Vec: Sparsity vs Prediction Loss")
+plt.ylabel("WordSim-353 Spearman Correlation")
+plt.title("Sparse Word2Vec: Sparsity vs Semantic Quality")
 
 plt.grid(alpha=0.25)
 plt.tight_layout()
+
+plt.savefig(
+    "sparsity_vs_semantic_quality.png",
+    dpi=300,
+    bbox_inches="tight"
+)
 
 plt.show()
